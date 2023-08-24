@@ -1,6 +1,6 @@
 [
     {
-        "name": "Function_0",
+        "name": "MVP25_Write",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
@@ -8,11 +8,10 @@
     {
         "name": "MVP25_Read",
         "private": false,
-        "run_as_system": true,
         "disable_arg_logs": true
     },
     {
-        "name": "MVP25_Write",
+        "name": "Function_Test",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
