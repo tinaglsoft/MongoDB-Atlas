@@ -126,8 +126,8 @@ jobs:
 
 # STORE THE REALM APP ID IN THE MOBILE APP CODE
 
-    - name: "Create realm-app-id.txt that stores the Realm app ID"
-      run: echo "${{ env.REALM_APP_ID }}" > $PWD/inventory/clients/ios-swiftui/InventoryDemo/realm-app-id.txt
+    # - name: "Create realm-app-id.txt that stores the Realm app ID"
+    #   run: echo "${{ env.REALM_APP_ID }}" > $PWD/inventory/clients/ios-swiftui/InventoryDemo/realm-app-id.txt
 
 # RUN TESTS
 
@@ -135,23 +135,23 @@ jobs:
 # If you have integration tests, you could also choose to checkout previous releases
 # and run the integration tests against the current version of the Realm app to
 # ensure backwards compatibility 
-    - name: "Build mobile app & run tests"
-      run: |
-           cd inventory/clients/ios-swiftui/InventoryDemo
+    # - name: "Build mobile app & run tests"
+    #   run: |
+    #        cd inventory/clients/ios-swiftui/InventoryDemo
 
-           # Build the app for testing
-           xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=latest' -derivedDataPath './output' build-for-testing
+    #        # Build the app for testing
+    #        xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=latest' -derivedDataPath './output' build-for-testing
 
-           # Define the simulators that will be used for testing
-           iPhone12Pro='platform=iOS Simulator,name=iPhone 12 Pro Max,OS=latest'
-           iPhone12='platform=iOS Simulator,name=iPhone 12,OS=latest'
-           iPadPro4='platform=iOS Simulator,name=iPad Pro (12.9-inch) (4th generation)'
+    #        # Define the simulators that will be used for testing
+    #        iPhone12Pro='platform=iOS Simulator,name=iPhone 12 Pro Max,OS=latest'
+    #        iPhone12='platform=iOS Simulator,name=iPhone 12,OS=latest'
+    #        iPadPro4='platform=iOS Simulator,name=iPad Pro (12.9-inch) (4th generation)'
 
-           # Run the tests on a variety of simulators
-           # Optionally, could put these in separate jobs to run in parallel
-           xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination "$iPhone12Pro" -derivedDataPath './output' test-without-building
-           xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination "$iPhone12" -derivedDataPath './output' test-without-building     
-           xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination "$iPadPro4" -derivedDataPath './output' test-without-building
+    #        # Run the tests on a variety of simulators
+    #        # Optionally, could put these in separate jobs to run in parallel
+    #        xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination "$iPhone12Pro" -derivedDataPath './output' test-without-building
+    #        xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination "$iPhone12" -derivedDataPath './output' test-without-building     
+    #        xcodebuild -project InventoryDemo.xcodeproj -scheme "ci" -sdk iphonesimulator -destination "$iPadPro4" -derivedDataPath './output' test-without-building
 
 # ARCHIVE THE APP (ONLY FOR PUSHES TO THE MAIN BRANCH)
 
@@ -161,57 +161,57 @@ jobs:
 # The code from this step is taken from GitHub Actions documentation available
 # at https://docs.github.com/en/actions/guides/installing-an-apple-certificate-on-macos-runners-for-xcode-development 
 # CC-BY Attribution 4.0 International License: https://github.com/github/docs/blob/main/LICENSE    
-    - name: "Install the Apple certificate and provisioning profile (so we can create the archive)"
-      if: ${{ github.ref == 'refs/heads/main' }}
-      env:
-          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
-          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
-          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-      run: |
-          # create variables
-          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
-          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
-          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+    # - name: "Install the Apple certificate and provisioning profile (so we can create the archive)"
+    #   if: ${{ github.ref == 'refs/heads/main' }}
+    #   env:
+    #       BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+    #       P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+    #       BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+    #       KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+    #   run: |
+    #       # create variables
+    #       CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+    #       PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+    #       KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
-          # import certificate and provisioning profile from secrets
-          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode --output $CERTIFICATE_PATH
-          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode --output $PP_PATH
+    #       # import certificate and provisioning profile from secrets
+    #       echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode --output $CERTIFICATE_PATH
+    #       echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode --output $PP_PATH
 
-          # create temporary keychain
-          security create-keychain -p $KEYCHAIN_PASSWORD $KEYCHAIN_PATH
-          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-          security unlock-keychain -p $KEYCHAIN_PASSWORD $KEYCHAIN_PATH
+    #       # create temporary keychain
+    #       security create-keychain -p $KEYCHAIN_PASSWORD $KEYCHAIN_PATH
+    #       security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+    #       security unlock-keychain -p $KEYCHAIN_PASSWORD $KEYCHAIN_PATH
 
-          # import certificate to keychain
-          security import $CERTIFICATE_PATH -P $P12_PASSWORD -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-          security list-keychain -d user -s $KEYCHAIN_PATH
+    #       # import certificate to keychain
+    #       security import $CERTIFICATE_PATH -P $P12_PASSWORD -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+    #       security list-keychain -d user -s $KEYCHAIN_PATH
 
-          # apply provisioning profile
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+    #       # apply provisioning profile
+    #       mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+    #       cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
 # If we are pushing to the main branch (meaning we are pushing to production),
 # create the mobile app archive (.ipa file)
-    - name: "Archive the mobile app"
-      if: ${{ github.ref == 'refs/heads/main' }}
-      run: |
-           cd inventory/clients/ios-swiftui/InventoryDemo
-           xcodebuild -workspace InventoryDemo.xcodeproj/project.xcworkspace/ -scheme ci archive -archivePath $PWD/build/ci.xcarchive -allowProvisioningUpdates
-           xcodebuild -exportArchive -archivePath $PWD/build/ci.xcarchive -exportPath $PWD/build -exportOptionsPlist $PWD/build/ci.xcarchive/Info.plist
+    # - name: "Archive the mobile app"
+    #   if: ${{ github.ref == 'refs/heads/main' }}
+    #   run: |
+    #        cd inventory/clients/ios-swiftui/InventoryDemo
+    #        xcodebuild -workspace InventoryDemo.xcodeproj/project.xcworkspace/ -scheme ci archive -archivePath $PWD/build/ci.xcarchive -allowProvisioningUpdates
+    #        xcodebuild -exportArchive -archivePath $PWD/build/ci.xcarchive -exportPath $PWD/build -exportOptionsPlist $PWD/build/ci.xcarchive/Info.plist
 
 # If we are pushing to the main branch (meaning we are pushing to production),
 # store the archive in a GitHub release
 # Alternatively, you could upload the app directly for beta testing and/or release
-    - name: "Store the Archive in a GitHub Release"
-      uses: softprops/action-gh-release@v1
-      if: ${{ github.ref == 'refs/heads/main' }}
-      with:
-          files: |
-            inventory/clients/ios-swiftui/InventoryDemo/build/InventoryDemo.ipa
-          tag_name: ${{ env.CURRENT_TIME }}
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # - name: "Store the Archive in a GitHub Release"
+    #   uses: softprops/action-gh-release@v1
+    #   if: ${{ github.ref == 'refs/heads/main' }}
+    #   with:
+    #       files: |
+    #         inventory/clients/ios-swiftui/InventoryDemo/build/InventoryDemo.ipa
+    #       tag_name: ${{ env.CURRENT_TIME }}
+    #   env:
+    #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 # CLEANUP
 
