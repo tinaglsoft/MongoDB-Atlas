@@ -46,7 +46,7 @@ jobs:
 
            # Update the databaseName in the development.json environment file
            # Set the database name to contain the branch name to ensure it's unique
-           cd export/sync/environments
+           cd environments
            printf '{\n     "values": {"databaseName": "InventoryDemo-%s"}\n}' "$branch" > development.json     
 
            # Indicate that the Realm app should use the development environment by updating realm_config.json
@@ -68,7 +68,7 @@ jobs:
            
            # Update the databaseName in the testing.json environment file
            # Set the database name to contain the current time to ensure it's unique
-           cd export/sync/environments
+           cd environments
            printf '{\n     "values": {"databaseName": "InventoryDemo-%s"}\n}' "${{ env.CURRENT_TIME }}" > testing.json     
            
            # Indicate that the Realm app should use the Testing environment by updating realm_config.json
@@ -91,7 +91,6 @@ jobs:
     - name: "Push updated copy of the Realm app for existing apps (Main, Staging, or Feature branches)"
       if: ${{ env.REALM_APP_ID }}
       run: | 
-           cd export/sync
            realm-cli push --remote="${{ env.REALM_APP_ID }}" -y
 
     - name: "Create a new Realm app for feature branches where the Realm app does not yet exist"
@@ -99,7 +98,6 @@ jobs:
       run: | 
 
            # Push to the Atlas project specifically for feature branches
-           cd export/sync
            realm-cli push -y --project 64e59918958cca7a91da52a2
 
            # Retrieve and store the Realm App ID from the output of 'realm-cli app describe'
@@ -116,7 +114,6 @@ jobs:
       run: | 
 
            # Push to the Atlas project specifically for pull requests
-           cd export/sync
            realm-cli push -y --project 64e59918958cca7a91da52a2
 
            # Retrieve and store the Realm App ID from the output of 'realm-cli app describe'
