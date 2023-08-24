@@ -17,11 +17,11 @@ jobs:
 
     - name: "Is this a push to the Main branch?"
       if: ${{ github.ref == 'refs/heads/main' }}
-      run: echo "REALM_APP_ID=application-0-zimrw" >> $GITHUB_ENV
+      run: echo "REALM_APP_ID=application-cicd-hrhpz" >> $GITHUB_ENV
 
     - name: "Is this a push to the Staging branch?"
       if: ${{ github.ref == 'refs/heads/staging' }}
-      run: echo "REALM_APP_ID=application-0-zimrw" >> $GITHUB_ENV
+      run: echo "REALM_APP_ID=application-cicd-hrhpz" >> $GITHUB_ENV
 
     - name: "Is this a push to a feature branch?"
       if: ${{ !env.REALM_APP_ID && github.event_name == 'push' }}
