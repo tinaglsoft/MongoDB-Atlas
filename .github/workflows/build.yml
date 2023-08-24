@@ -126,8 +126,8 @@ jobs:
 
 # STORE THE REALM APP ID IN THE MOBILE APP CODE
 
-    - name: "Create realm-app-id.txt that stores the Realm app ID"
-      run: echo "${{ env.REALM_APP_ID }}" > $PWD/inventory/clients/ios-swiftui/InventoryDemo/realm-app-id.txt
+    # - name: "Create realm-app-id.txt that stores the Realm app ID"
+    #   run: echo "${{ env.REALM_APP_ID }}" > $PWD/inventory/clients/ios-swiftui/InventoryDemo/realm-app-id.txt
 
 # RUN TESTS
 
@@ -193,25 +193,25 @@ jobs:
 
 # If we are pushing to the main branch (meaning we are pushing to production),
 # create the mobile app archive (.ipa file)
-    - name: "Archive the mobile app"
-      if: ${{ github.ref == 'refs/heads/main' }}
-      run: |
-           cd inventory/clients/ios-swiftui/InventoryDemo
-           xcodebuild -workspace InventoryDemo.xcodeproj/project.xcworkspace/ -scheme ci archive -archivePath $PWD/build/ci.xcarchive -allowProvisioningUpdates
-           xcodebuild -exportArchive -archivePath $PWD/build/ci.xcarchive -exportPath $PWD/build -exportOptionsPlist $PWD/build/ci.xcarchive/Info.plist
+    # - name: "Archive the mobile app"
+    #   if: ${{ github.ref == 'refs/heads/main' }}
+    #   run: |
+    #        cd inventory/clients/ios-swiftui/InventoryDemo
+    #        xcodebuild -workspace InventoryDemo.xcodeproj/project.xcworkspace/ -scheme ci archive -archivePath $PWD/build/ci.xcarchive -allowProvisioningUpdates
+    #        xcodebuild -exportArchive -archivePath $PWD/build/ci.xcarchive -exportPath $PWD/build -exportOptionsPlist $PWD/build/ci.xcarchive/Info.plist
 
 # If we are pushing to the main branch (meaning we are pushing to production),
 # store the archive in a GitHub release
 # Alternatively, you could upload the app directly for beta testing and/or release
-    - name: "Store the Archive in a GitHub Release"
-      uses: softprops/action-gh-release@v1
-      if: ${{ github.ref == 'refs/heads/main' }}
-      with:
-          files: |
-            inventory/clients/ios-swiftui/InventoryDemo/build/InventoryDemo.ipa
-          tag_name: ${{ env.CURRENT_TIME }}
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # - name: "Store the Archive in a GitHub Release"
+    #   uses: softprops/action-gh-release@v1
+    #   if: ${{ github.ref == 'refs/heads/main' }}
+    #   with:
+    #       files: |
+    #         inventory/clients/ios-swiftui/InventoryDemo/build/InventoryDemo.ipa
+    #       tag_name: ${{ env.CURRENT_TIME }}
+    #   env:
+    #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 # CLEANUP
 
