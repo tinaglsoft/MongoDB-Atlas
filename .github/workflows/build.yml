@@ -100,7 +100,7 @@ jobs:
 
            # Push to the Atlas project specifically for feature branches
            cd export
-           realm-cli push -y --project inventory
+           realm-cli push -y --project 609ea554944fe545460529a1
 
            # Retrieve and store the Realm App ID from the output of 'realm-cli app describe'
            output=$(realm-cli app describe)
@@ -117,7 +117,7 @@ jobs:
 
            # Push to the Atlas project specifically for pull requests
            cd export
-           realm-cli push -y --project inventory
+           realm-cli push -y --project 609ea554944fe545460529a1
 
            # Retrieve and store the Realm App ID from the output of 'realm-cli app describe'
            output=$(realm-cli app describe)
