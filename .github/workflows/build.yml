@@ -92,7 +92,6 @@ jobs:
       if: ${{ env.REALM_APP_ID }}
       run: | 
            realm-cli push --remote="${{ env.REALM_APP_ID }}" -y
-           realm-cli http import -f /http_endpoints/config.json --remote="${{ env.REALM_APP_ID }}" -y
 
     - name: "Create a new Realm app for feature branches where the Realm app does not yet exist"
       if: ${{ env.REALM_APP_ID == null && github.event_name == 'push' }}
