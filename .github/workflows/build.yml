@@ -18,6 +18,7 @@ jobs:
     - name: "Install the Realm CLI & authenticate"
       run: |
            npm install -g mongodb-realm-cli
+           realm-cli --version
            realm-cli login --api-key="vjsoynii" --private-api-key="a65be2cf-5229-4810-8a2a-33991968d701" --realm-url https://realm.mongodb.com --atlas-url https://cloud.mongodb.com
 
     - name: "Push updated copy of the Realm app for existing apps (Main, Staging, or Feature branches)"
