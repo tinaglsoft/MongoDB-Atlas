@@ -1,7 +1,7 @@
 {
-    "app_id": "application-jerry-wdjdm",
+    "app_id": "application-cicd-hrhpz",
     "config_version": 20210101,
-    "name": "Application-Jerry",
+    "name": "Application-CICD",
     "location": "US-VA",
     "provider_region": "aws-us-east-1",
     "deployment_model": "LOCAL"
