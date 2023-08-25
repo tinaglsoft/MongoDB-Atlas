@@ -12,12 +12,12 @@ jobs:
 # For more information on setting environment variables in GitHub Actions, 
 # see https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable 
 
-    - name: "Store current time in variable"
-      run: echo "CURRENT_TIME=$(date +'%Y-%m-%d_%s')" >> $GITHUB_ENV
+    # - name: "Store current time in variable"
+    #   run: echo "CURRENT_TIME=$(date +'%Y-%m-%d_%s')" >> $GITHUB_ENV
 
-    - name: "Is this a push to the Main branch?"
-      if: ${{ github.ref == 'refs/heads/main' }}
-      run: echo "REALM_APP_ID=application-cicd-hrhpz" >> $GITHUB_ENV
+    # - name: "Is this a push to the Main branch?"
+    #   if: ${{ github.ref == 'refs/heads/main' }}
+    #   run: echo "REALM_APP_ID=application-cicd-hrhpz" >> $GITHUB_ENV
 
 # INSTALL THE REALM-CLI AND AUTHENTICATE
 
@@ -27,11 +27,10 @@ jobs:
     - name: "Install the Realm CLI & authenticate"
       run: |
            npm install -g mongodb-realm-cli@beta
-           realm-cli login --api-key="${{ secrets.REALM_API_PUBLIC_KEY }}" --private-api-key="${{ secrets.REALM_API_PRIVATE_KEY }}" --realm-url https://realm.mongodb.com --atlas-url https://cloud.mongodb.com
+           realm-cli login --api-key="vjsoynii" --private-api-key="a65be2cf-5229-4810-8a2a-33991968d701" --realm-url https://realm.mongodb.com --atlas-url https://cloud.mongodb.com
 
 # PUSH THE REALM APP
 
     - name: "Push updated copy of the Realm app for existing apps (Main, Staging, or Feature branches)"
-      if: ${{ env.REALM_APP_ID }}
       run: | 
-           realm-cli push --remote="${{ env.REALM_APP_ID }}" -y
+           realm-cli push --remote=application-cicd-hrhpz -y
