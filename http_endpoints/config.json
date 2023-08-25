@@ -22,7 +22,7 @@
       "return_type": "JSON"
   },
   {
-      "route": "/mongodb/atlas/product/_id",
+      "route": "/mongodb/atlas/product/id",
       "http_method": "GET",
       "function_name": "Function_Test",
       "validation_method": "NO_VALIDATION",
