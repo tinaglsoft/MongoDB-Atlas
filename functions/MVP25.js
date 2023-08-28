@@ -2,13 +2,11 @@ exports = async function(request, response) {
   
   var serviceName = "mongodb-atlas";
 
-  var dbName = "test";
-  var collName = "cust_prod_review";
+  var dbName = "sample_database";
+  var collName = "sample_collection";
 
   // Get a collection from the context
   var collection = context.services.get(serviceName).db(dbName).collection(collName);
-  
-  var result;
   
   try {
     let body = JSON.parse(request.body.text());
@@ -28,16 +26,34 @@ exports = async function(request, response) {
       };
     });
     
-    result = {
-      pk: productList[0].pk,
-      customer_id: memberNumber,
-      categories: categories,
-      recommendation_id: "bpph"
-    }
+    response.setStatusCode(200);
+
+    response.setHeader(
+      "Content-Type",
+      "application/json"
+    );
+    
+    response.setBody(
+      JSON.stringify({
+        pk: productList[0].pk,
+        customer_id: memberNumber,
+        categories: categories,
+        recommendation_id: "bpph"
+      })
+    );
     
   } catch(err) {
-    return { error: "Require memberNumber" };
+    response.setStatusCode(400);
+
+    response.setHeader(
+      "Content-Type",
+      "application/json"
+    );
+
+    response.setBody(
+      JSON.stringify(
+        {error: 'Require memberNumber'}
+      )
+    );
   }
-  
-  return result;
 };
