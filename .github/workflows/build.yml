@@ -14,7 +14,7 @@ jobs:
 
     - name: "Is this a push to the Main branch?"
       if: ${{ github.ref == 'refs/heads/main' }}
-      run: echo "REALM_APP_ID=application-cicd-hrhpz" >> $GITHUB_ENV
+      run: echo "REALM_APP_ID=sample-hgywe" >> $GITHUB_ENV
 
     - name: "Install the Realm CLI & authenticate"
       run: |
